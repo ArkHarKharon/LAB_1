@@ -55,19 +55,8 @@ void input(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5>&
 
 void add(std::array<Awful, 5>& arr, std::array <States, 5> &states)
 {
-	for (std::size_t i{ 0 }; i < arr.size(); i++)
-	{
-		std::cout << "Does this person play Civilization 6(Civ) or Eve Online(Eve): ";
-		std::string answer;
-		std::getline(std::cin, answer);
-
-		if (answer == "Civ")
-			input_civ(arr, i ,states);
-		else if (answer == "Eve")
-			input_eve(arr, i ,states);
-		else
-			std::cout << "Input error...";
-	}
+	for (std::size_t index{ 0 }; index < arr.size(); index++)
+		input(arr, index, states);
 }
 
 void delete_item(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5> &states, Civ6 &str)
@@ -98,7 +87,7 @@ States definer(std::array<Awful, 5> const& arr, std::size_t index, std::array <S
 
 void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <States, 5> &states)
 {
-	switch (definer(arr, index, states))
+	switch (states.at(index))
 	{
 	case(EMPTY):
 		std::cout << "This union is empty!";

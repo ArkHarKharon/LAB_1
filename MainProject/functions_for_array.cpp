@@ -85,28 +85,36 @@ void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <
 		system("cls");
 		std::cout << index << "-th element is empty!";
 		break;
+
 	case(CIV6):
 		system("cls");
 		std::cout << "\t\t\t----------CIVILIZATION PLAYER (" << index << "/4 NUMBER)----------\n\n";
 		std::cout << "Hours of playing Civilization 6: " << arr.at(index).civ.hours;
 		std::cout << "\nMax science: " << arr.at(index).civ.science;
 
-		if ((arr.at(index).civ.idk == true))
-			std::cout << termcolor::red	 << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+		if ((arr.at(index).civ.idk == true) or arr.at(index).civ.hours >= 1000)
+		{
+			std::cout << "\nGayness:" << termcolor::red << "TRUE" << termcolor::reset;
+			std::cout << termcolor::red << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+		}
 		else
-			std::cout << termcolor::green<< "\nGayness: false" << termcolor::reset;
+			std::cout << "\nGayness:" << termcolor::green << "false" << termcolor::reset;
 
 		break;
+
 	case(EVE):
 		system("cls");
 		std::cout << "\t\t\t----------EVE ONLINE PLAYER (" << index << "/4 NUMBER)----------\n\n";
 		std::cout << "Hours of playing EVE Online: " << arr.at(index).eve.hours;
 		std::cout << "\nMax dps: " << arr.at(index).eve.dps;
 		
-		if ((arr.at(index).eve.idk == true)) 
+		if ((arr.at(index).eve.idk == true) or arr.at(index).eve.hours >= 1000)
+		{
+			std::cout << "\nGayness:" << termcolor::red << "TRUE" << termcolor::reset;
 			std::cout << termcolor::red << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+		}
 		else
-			std::cout << "\nGayness: false";
+			std::cout << "\nGayness:" << termcolor::green << "false" << termcolor::reset;
 
 		break;
 	}
@@ -116,7 +124,10 @@ void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <
 void print_all(std::array<Awful, 5> const& arr, std::array <States, 5> &states)
 {
 	for (std::size_t index{ 0 }; index < arr.size(); index++)
-		print_item(arr, index,states);
+	{
+		print_item(arr, index, states);
+		Sleep(3000);
+	}
 }
 
 
@@ -310,13 +321,13 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 				system("cls");
 				break;
 			}
-			Sleep(5000);
 			system("cls");
 			break;
 
 		case(6):
 			std::cout << "\t\t\t----------PRINT ALL----------\n\n";
 			print_all(arr, states);
+			Sleep(10000);
 			system("cls");
 			std::cout << termcolor::green << "Done!" << termcolor::reset;
 			pclear();

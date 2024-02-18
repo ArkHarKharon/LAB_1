@@ -5,3 +5,6 @@
 #include "union.h"
 #include <iostream>
 #include <array>
+#include <windows.h>
+#include "termcolor.hpp"
+#include <ctime>

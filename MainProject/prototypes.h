@@ -19,3 +19,7 @@ void print_all(std::array<Awful, 5> const& arr, std::array <States, 5>& states);
 void main_menu(std::array<Awful, 5>& arr, std::array<States, 5>& states, Civ6& clear_str);
 
 void joking();
+
+void pclear();
+
+int random(int min, int max);

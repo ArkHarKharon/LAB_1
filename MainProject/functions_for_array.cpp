@@ -2,20 +2,23 @@
 #include "union.h"
 #include <iostream>
 #include <array>
-
+#include <Windows.h>
+#include <ctime>
+#include <string>
+#include "termcolor.hpp"
 
 
 
 void input_civ(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5> &states)
 {
-	std::cout << "How long do you play Civilization 6: ";
+	std::cout << "How many hours do you play Civilization 6: ";
 	std::cin >> arr.at(index).civ.hours;
 
 	std::cout << "Max science: ";
 	std::cin >> arr.at(index).civ.science;
 
 
-	std::cout << "1 or 0: ";
+	std::cout << "1 or 0 (don't ask): ";
 	std::cin >> arr.at(index).civ.idk;
 
 	states.at(index) = CIV6; //Записываю CIV6 в массив состояний
@@ -24,14 +27,14 @@ void input_civ(std::array<Awful, 5>& arr, std::size_t index, std::array <States,
 
 void input_eve(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5> &states)
 {
-	std::cout << "How long do you play Eve Online: ";
+	std::cout << "How many hours do you play Eve Online: ";
 	std::cin >> arr.at(index).eve.hours;
 
 	std::cout << "Damage per second: ";
 	std::cin >> arr.at(index).eve.dps;
 
 
-	std::cout << "1 or 0: ";
+	std::cout << "1 or 0 (don't ask): ";
 	std::cin >> arr.at(index).eve.idk;
 
 	states.at(index) = EVE; //Записываю EVE в массив состояний
@@ -40,7 +43,7 @@ void input_eve(std::array<Awful, 5>& arr, std::size_t index, std::array <States,
 
 void input(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5>& states)
 {
-	std::cout << "Does this person play Civilization 6(0) or Eve Online(1): ";
+	std::cout << "Do you play Civilization 6(0) or Eve Online(1): ";
 	int choise{};
 	std::cin >> choise;
 
@@ -49,31 +52,19 @@ void input(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5>&
 	else if (choise == 1)
 		input_eve(arr, index, states);
 	else
-		std::cout << "Input error...";
+		std::cout << termcolor::red << "Input error..." << termcolor::reset;
 }
 
 
 void add(std::array<Awful, 5>& arr, std::array <States, 5> &states)
 {
-	for (std::size_t i{ 0 }; i < arr.size(); i++)
-	{
-		std::cout << "Does this person play Civilization 6(Civ) or Eve Online(Eve): ";
-		std::string answer;
-		std::getline(std::cin, answer);
-
-		if (answer == "Civ")
-			input_civ(arr, i ,states);
-		else if (answer == "Eve")
-			input_eve(arr, i ,states);
-		else
-			std::cout << "Input error...";
-	}
-}
+	for (std::size_t index{ 0 }; index < arr.size(); index++)
+		input(arr, index, states);
+}		
 
 void delete_item(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5> &states, Civ6 &str)
 {
 	arr.at(index).civ = str;
-
 	states.at(index) = EMPTY;
 }
 
@@ -85,33 +76,38 @@ void delete_all(std::array<Awful, 5> &arr, std::array <States, 5> &states, Civ6&
 	states.fill(EMPTY);
 }
 
-States definer(std::array<Awful, 5> const& arr, std::size_t index, std::array <States, 5> &states) //Возвращает enum-статус данной ячейки данного массива 
-{
-	switch (states.at(index))
-	{
-	case(EMPTY): return EMPTY; break;
-	case(EVE): return EVE; break;
-	case(CIV6): return CIV6; break;
-	}
-} 
-
 
 void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <States, 5> &states)
 {
-	switch (definer(arr, index, states))
+	switch (states.at(index))
 	{
 	case(EMPTY):
-		std::cout << "This union is empty!";
+		system("cls");
+		std::cout << index << "-th element is empty!";
 		break;
 	case(CIV6):
-		std::cout << "Hours of playing Civilization 6:" << arr.at(index).civ.hours;
-		std::cout << "Max science: " << arr.at(index).civ.science;
-		std::cout << "Gayness: " << ((arr.at(index).civ.idk)?("true") : ("false"));
+		system("cls");
+		std::cout << "\t\t\t----------CIVILIZATION PLAYER (" << index << "/4 NUMBER)----------\n\n";
+		std::cout << "Hours of playing Civilization 6: " << arr.at(index).civ.hours;
+		std::cout << "\nMax science: " << arr.at(index).civ.science;
+
+		if ((arr.at(index).civ.idk == true))
+			std::cout << termcolor::red	 << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+		else
+			std::cout << termcolor::green<< "\nGayness: false" << termcolor::reset;
+
 		break;
 	case(EVE):
-		std::cout << "Time of playing Civilization 6:" << arr.at(index).eve.hours;
-		std::cout << "Max dps: " << arr.at(index).eve.dps;
-		std::cout << "Gayness: " << ((arr.at(index).eve.idk) ? ("true") : ("false"));
+		system("cls");
+		std::cout << "\t\t\t----------EVE ONLINE PLAYER (" << index << "/4 NUMBER)----------\n\n";
+		std::cout << "Hours of playing EVE Online: " << arr.at(index).eve.hours;
+		std::cout << "\nMax dps: " << arr.at(index).eve.dps;
+		
+		if ((arr.at(index).eve.idk == true)) 
+			std::cout << termcolor::red << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+		else
+			std::cout << "\nGayness: false";
+
 		break;
 	}
 }
@@ -124,19 +120,101 @@ void print_all(std::array<Awful, 5> const& arr, std::array <States, 5> &states)
 }
 
 
-void joking()
+int random(int min, int max)
 {
-
+	srand(time(NULL));
+	int number = min + rand() % (max - min + 1);
+	return number;
 }
 
+
+void joking()				//Выводит случайную шутку
+{
+	switch (random(0, 10))
+	{
+	case(0):
+		std::cout 
+			<< "\tПрограммирование похоже на секс:\n"
+			<< " одна ошибка – и всю жизнь придется поддерживать.";
+		break;
+
+	case(1):
+		std::cout
+			<< "\tЕсли бы строители работали так же, как программисты кодят,\n"
+			<< " то любая птица, присевшая отдохнуть на крыше дома,\n"
+			<< " могла бы стать причиной гибели цивилизации.";
+		break;
+
+	case(2):
+		std::cout
+			<< "\tЕсли в очередном релизе Java будет реализована функция уборки программного мусора,\n"
+			<< " большая часть Java - приложений будут удалять себя сразу после установки.";
+		break;
+
+	case(3):
+		std::cout
+			<< "\tОтладка – это удаление из программного кода различных багов.\n"
+			<< " Значит, программирование – это создание и добавление этих самых багов в код?";
+		break;
+
+	case(4):
+		std::cout
+			<< "\tЧто общего между программным кодом и церковью?\n"
+			<< " Сначала мы их строим, потом начинаем на них молиться.";
+		break;
+
+	case(5):
+		std::cout << "\tСкажите, IT-шник – это ориентация или все же диагноз?";
+		break;
+
+	case(6):
+		std::cout
+			<< "\tОб операторе GoTo: даже в высшем обществе бывают ситуации,\n"
+			<< " когда без фразы типа «иди на» обойтись невозможно.";
+		break;
+
+	case(7):
+		std::cout
+			<< "\tСовременное программное обеспечение напоминает египетские пирамиды.\n"
+			<< " Миллионы блоков как-то стоят друг на друге без какой-то целостности конструкции,\n"
+			<< " но с помощью каторжного труда тысяч рабов.";
+		break;
+
+	case(8):
+		std::cout
+			<< "\tНе переживай, если не все работает как надо.\n"
+			<< " Если бы все  работало хорошо , то ты бы здесь давно уже не работал.";
+		break;
+
+	case(9):
+		std::cout
+			<< "\tКод писать надо так , словно человек, который будет его поддерживать  — психопат,\n"
+			<< " который знает, где ты живешь.";
+		break;
+
+	case(10):
+		std::cout
+			<< "\tГлавная задача  разработки – сделать  что-то,\n"
+			<< " что проживет  хотя бы до момента завершения стройки.";
+		break;
+	}
+}  
+
+
+void pclear()				//задержка на 4 секунды и очистка консоли
+{
+	Sleep(4000);
+	system("cls");
+}
 
 void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear_str)
 {
 	std::cout
 		<< "Hello there!\n"
-		<< "I hope you'll enjoy this...perfomance\n"
+		<< "I hope you'll enjoy this...perfomance.\n"
 		<< "Well, talk is cheap, programmers' work is expensive, so let's go!";
 
+	Sleep(10000);
 	system("cls");
 
 	int answer{ 0 };
@@ -144,12 +222,11 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 	std::size_t index3{ 0 };
 	std::size_t index5{ 0 };
 
-
-
 	do
 	{
+
 		std::cout
-			<< "\t\t----------MENU----------\n"
+			<< "\t\t\t----------MENU----------\n\n"
 			<< "1) I want to input a current item\n"
 			<< "2) I want to input the whole union array\n"
 			<< "3) I want to clear current item\n"
@@ -161,42 +238,105 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 
 		std::cout << "Your option: ";
 		std::cin >> answer;
+		system("cls");
 
 		switch (answer)
 		{
 		case(1):
-			std::cout << "Element's index:";
+			std::cout << "\t\t\t----------INPUT ITEM----------\n\n";
+			std::cout << "Element's index(0-4): ";
 			std::cin >> index1;
-			input(arr,index1, states);
+			if (index1 >= 0 and index1 <= 4) 
+				input(arr, index1, states);
+			else
+			{
+				system("cls");
+				std::cout << termcolor::red << "Index is out of range!" << termcolor::reset;
+				Sleep(3000);
+				system("cls");
+				break;
+			}
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
 			break;
 
-		case(2): add(arr, states); break;
+		case(2):
+			std::cout << "\t\t\t----------INPUT ALL----------\n\n";
+			add(arr, states);
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
+			break;
 
 		case(3):
-			std::cout << "Element's index:";
+			std::cout << "\t\t\t----------DELETE ITEM----------\n\n";
+			std::cout << "Element's index: ";
 			std::cin >> index3;
-			delete_item(arr, index3, states,clear_str);
+			if (index3 >= 0 and index3 <= 4)
+				delete_item(arr, index3, states, clear_str);
+			else
+			{
+				system("cls");
+				std::cout << termcolor::red << "Index is out of range!" << termcolor::reset;
+				Sleep(3000);
+				system("cls");
+				break;
+			}
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
 			break;
 
-		case(4): delete_all(arr, states, clear_str); break;
+		case(4):
+			std::cout << "\t\t\t----------DELETE ALL----------\n\n";
+			delete_all(arr, states, clear_str);
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
+			break;
 
 		case(5):
-			std::cout << "Element's index:";
+			std::cout << "\t\t\t----------PRINT ITEM----------\n\n";
+			std::cout << "Element's index: ";
 			std::cin >> index5;
-			print_item(arr, index5, states);
+			if (index5 >= 0 and index5 <= 4)
+				print_item(arr, index5, states);
+			else
+			{
+				system("cls");
+				std::cout << termcolor::red << "Index is out of range!" << termcolor::reset;
+				Sleep(3000);
+				system("cls");
+				break;
+			}
+			Sleep(5000);
+			system("cls");
 			break;
 
-		case(6): print_all(arr, states); break; 
+		case(6):
+			std::cout << "\t\t\t----------PRINT ALL----------\n\n";
+			print_all(arr, states);
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
+			break; 
 
-		case(7): joking(); break; //Выводит случайную шутку
+		case(7):
+			std::cout << "\t\t\t----------JOKE----------\n\n";
+			joking();
+			Sleep(10000);
+			system("cls");
+			break;				
 
-		case(8): break;
+		case(8): break;         //Выход из цикла
 
 		default:
-			std::cout << "Oops...try again...";
+			std::cout << termcolor::red << "\t\t\t----------UNEXPECTED ERROR----------\n\n" ;
+			std::cout  << "Error...try again..." << termcolor::reset;
+			pclear();
 			break;
 		}
 	} while (answer != 8);
-	std::cout << "Until we meet again!";
-}
 
+}

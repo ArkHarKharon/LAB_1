@@ -1,9 +1,6 @@
 #include "all_pack.h"
 
 
-
-
-
 int main()
 {
 	std::array<Awful, 5> main_array{};				//Основной union массив 
@@ -11,7 +8,7 @@ int main()
 	Civ6 clear_structure{};							//Пустая структура для очистки ячейки основного массива
 
 	setlocale(0, "");								//Не знаю, зачем он тут
-	states_array.fill(EMPTY);						//Заполняю states элементами EMPTY
+	states_array.fill(States::EMPTY);						//Заполняю states элементами EMPTY
 
 	main_menu(main_array, states_array, clear_structure);
 

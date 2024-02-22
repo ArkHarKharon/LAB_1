@@ -6,6 +6,7 @@
 #include <ctime>
 #include <string>
 #include "termcolor.hpp"
+#include "prototypes.h"
 
 
 
@@ -21,7 +22,7 @@ void input_civ(std::array<Awful, 5>& arr, std::size_t index, std::array <States,
 	std::cout << "1 or 0 (don't ask): ";
 	std::cin >> arr.at(index).civ.idk;
 
-	states.at(index) = CIV6; //Записываю CIV6 в массив состояний
+	states.at(index) = States::CIV6; //Записываю CIV6 в массив состояний
 }
 
 
@@ -37,7 +38,7 @@ void input_eve(std::array<Awful, 5>& arr, std::size_t index, std::array <States,
 	std::cout << "1 or 0 (don't ask): ";
 	std::cin >> arr.at(index).eve.idk;
 
-	states.at(index) = EVE; //Записываю EVE в массив состояний
+	states.at(index) = States::EVE; //Записываю EVE в массив состояний
 }
 
 
@@ -65,7 +66,7 @@ void add(std::array<Awful, 5>& arr, std::array <States, 5> &states)
 void delete_item(std::array<Awful, 5>& arr, std::size_t index, std::array <States, 5> &states, Civ6 &str)
 {
 	arr.at(index).civ = str;
-	states.at(index) = EMPTY;
+	states.at(index) = States::EMPTY;
 }
 
 void delete_all(std::array<Awful, 5> &arr, std::array <States, 5> &states, Civ6& str)
@@ -73,7 +74,7 @@ void delete_all(std::array<Awful, 5> &arr, std::array <States, 5> &states, Civ6&
 	for (std::size_t index{ 0 }; index < arr.size(); index++)
 		delete_item(arr, index,states,str);
 
-	states.fill(EMPTY);
+	states.fill(States::EMPTY);
 }
 
 
@@ -81,12 +82,12 @@ void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <
 {
 	switch (states.at(index))
 	{
-	case(EMPTY):
+	case(States::EMPTY):
 		system("cls");
 		std::cout << index << "-th element is empty!";
 		break;
 
-	case(CIV6):
+	case(States::CIV6):
 		system("cls");
 		std::cout << "\t\t\t----------CIVILIZATION PLAYER (" << index << "/4 NUMBER)----------\n\n";
 		std::cout << "Hours of playing Civilization 6: " << arr.at(index).civ.hours;
@@ -96,13 +97,14 @@ void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <
 		{
 			std::cout << "\nGayness:" << termcolor::red << "TRUE" << termcolor::reset;
 			std::cout << termcolor::red << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+			Sleep(6000);
 		}
 		else
 			std::cout << "\nGayness:" << termcolor::green << "false" << termcolor::reset;
 
 		break;
 
-	case(EVE):
+	case(States::EVE):
 		system("cls");
 		std::cout << "\t\t\t----------EVE ONLINE PLAYER (" << index << "/4 NUMBER)----------\n\n";
 		std::cout << "Hours of playing EVE Online: " << arr.at(index).eve.hours;
@@ -112,6 +114,7 @@ void print_item(std::array<Awful, 5> const& arr, std::size_t index, std::array <
 		{
 			std::cout << "\nGayness:" << termcolor::red << "TRUE" << termcolor::reset;
 			std::cout << termcolor::red << "\n\t\t\t!!!!ATTENTION!!!!   !!!GAY DETECTED!!!" << termcolor::reset;
+			Sleep(6000);
 		}
 		else
 			std::cout << "\nGayness:" << termcolor::green << "false" << termcolor::reset;
@@ -225,7 +228,7 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 		<< "I hope you'll enjoy this...perfomance.\n"
 		<< "Well, talk is cheap, programmers' work is expensive, so let's go!";
 
-	Sleep(10000);
+	Sleep(8000);
 	system("cls");
 
 	int answer{ 0 };
@@ -245,7 +248,9 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 			<< "5) I want to print current item\n"
 			<< "6) I want to print the whole union array\n"
 			<< "7) I want a joke(-___-)\n"
-			<< "8) I want to exit!\n\n";
+			<< "8) I want to write down the file\n"
+			<< "9) I want to read the file\n"
+			<< "10) I want to exit!\n\n";
 
 		std::cout << "Your option: ";
 		std::cin >> answer;
@@ -313,6 +318,7 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 			std::cin >> index5;
 			if (index5 >= 0 and index5 <= 4)
 				print_item(arr, index5, states);
+
 			else
 			{
 				system("cls");
@@ -338,16 +344,34 @@ void main_menu(std::array<Awful,5> &arr,std::array<States,5> &states,Civ6 &clear
 			joking();
 			Sleep(10000);
 			system("cls");
-			break;				
+			break;		
 
-		case(8): break;         //Выход из цикла
+		case(8):
+			std::cout << "\t\t\t----------WRITING FILE----------\n\n";
+			saving(arr, states);
+			Sleep(10000);
+			system("cls");
+			break;
+
+		case(9):
+			std::cout << "\t\t\t----------READING FILE----------\n\n";
+			system("cls");
+			reading(arr, states);
+			Sleep(10000);
+			system("cls");
+			std::cout << termcolor::green << "Done!" << termcolor::reset;
+			pclear();
+			break;
+
+		case(10): break;         //Выход из цикла
 
 		default:
+			system("cls");
 			std::cout << termcolor::red << "\t\t\t----------UNEXPECTED ERROR----------\n\n" ;
 			std::cout  << "Error...try again..." << termcolor::reset;
 			pclear();
 			break;
 		}
-	} while (answer != 8);
+	} while (answer != 10);
 
 }
